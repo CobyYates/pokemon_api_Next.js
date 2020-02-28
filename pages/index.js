@@ -1,11 +1,9 @@
 import React from "react";
 import Head from "next/head";
 // import { Component } from "react";
-import Router from 'next/router'
+import Router from "next/router";
 import Link from "next/link";
 import pokemonApi, { getId } from "../api/pokemon";
-
-
 
 const Home = ({ pokemons = [], count }) => (
   <div className="area">
@@ -13,9 +11,21 @@ const Home = ({ pokemons = [], count }) => (
       <title>Pokemon | NEXT.js | Coby Yates</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
+
     <div className="hero">
       <h1 className="title">Catch 'Em All</h1>
       <center>
+        <button onClick={rand}>Request Random Pokemon</button>
+
+        <form className="form" onSubmit={test}>
+          <h2>Find a Pokemon</h2>
+          <div>
+            <div>
+              <input name="id" label="id" id="name" required />
+            </div>
+          </div>
+          <button>Find</button>
+        </form>
         <ul className="list">
           {pokemons.map(pokemon => {
             const id = getId(pokemon);
@@ -30,22 +40,6 @@ const Home = ({ pokemons = [], count }) => (
           })}
         </ul>
       </center>
-
-      <button onClick={rand}>Request Random Pokemon</button>
-
-      <form
-        className="form"
-        // onSubmit={(e) => Router.push('/15')}
-        onSubmit={test}
-      >
-        <h2>Find a Pokemon</h2>
-        <div>
-          <div>
-            <input name="id" label="id" id="name" required />
-          </div>
-        </div>
-        <button>Find</button>
-      </form>
     </div>
 
     <style jsx>{`
@@ -109,13 +103,13 @@ Home.getInitialProps = async ({ req }) => {
 };
 
 const test = () => {
-  let path = document.getElementById('name').value
-  Router.push(`/${path}`)
-}
+  let path = document.getElementById("name").value;
+  Router.push(`/${path}`);
+};
 
 const rand = () => {
-  let randomNum = Math.floor((Math.random() * 100) + 1)
-  Router.push(`/${randomNum}`)
-}
+  let randomNum = Math.floor(Math.random() * 100 + 1);
+  Router.push(`/${randomNum}`);
+};
 
 export default Home;
