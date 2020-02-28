@@ -1,26 +1,30 @@
-import React, { Fragment } from 'react'
-import Head from 'next/head'
-import Nav from '../comps/nav'
-import Link from 'next/link'
-import pokemonApi from '../api/pokemon'
+import React, { Fragment } from "react";
+import Head from "next/head";
+import Nav from "../comps/nav";
+import Link from "next/link";
+import pokemonApi from "../api/pokemon";
 
-const Detail = ({ pokemon }) => (
+const Detail = ({ pokemon, type }) => (
   <div>
     <Head>
       <title>Pokemon Detail</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <div className="hero">
-      <h1 className="title">Gotta Catch 'Em All</h1>
+      <h1 className="title">{pokemon.name.toUpperCase()}</h1>
       <center>
-        <h2>{pokemon.name}</h2>
-        <p>ID: {pokemon.id}</p>
         {pokemon.sprites ? (
           <Fragment>
             <img src={pokemon.sprites.front_default} alt="front sprite" />
             <img src={pokemon.sprites.back_default} alt="back sprite" />
           </Fragment>
         ) : null}
+        <p><strong>Height:</strong> {pokemon.height}</p>
+        <p><strong>Types:</strong> {type}</p>
+
+        <p><strong>Weight:</strong> {pokemon.weight}</p>
+        <p><strong>Height:</strong> {pokemon.height}</p>
+        
       </center>
       <Link href={`/`}>
         <a>Back to list</a>
@@ -38,6 +42,7 @@ const Detail = ({ pokemon }) => (
         padding-top: 80px;
         line-height: 1.15;
         font-size: 48px;
+        font-weight: 200;
       }
       .title,
       .description {
@@ -74,15 +79,19 @@ const Detail = ({ pokemon }) => (
       }
     `}</style>
   </div>
-)
+);
 
 Detail.getInitialProps = async ({ query }) => {
-  
-  const { data } = await pokemonApi.get(query.id)
-  console.log(data)
+  const { data } = await pokemonApi.get(query.id);
+  console.log(data);
+  const types = data.types.map(el => {
+    return el.type.name + ' '
+  });
+  console.log(types);
   return {
     pokemon: data,
-  }
-}
+    type: types,
+  };
+};
 
-export default Detail
+export default Detail;

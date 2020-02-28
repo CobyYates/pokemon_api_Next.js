@@ -1,32 +1,51 @@
-import React from 'react'
-import Head from 'next/head'
-import Nav from '../comps/nav'
-import Link from 'next/link'
-import pokemonApi, { getId } from '../api/pokemon'
+import React from "react";
+import Head from "next/head";
+// import { Component } from "react";
+import Router from 'next/router'
+import Link from "next/link";
+import pokemonApi, { getId } from "../api/pokemon";
+
+
 
 const Home = ({ pokemons = [], count }) => (
-  <div>
+  <div className="area">
     <Head>
-      <title>Pokemon Home</title>
+      <title>Pokemon | NEXT.js | Coby Yates</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <div className="hero">
-      <h1 className="title">Gotta Catch 'Em All</h1>
+      <h1 className="title">Catch 'Em All</h1>
       <center>
         <ul className="list">
           {pokemons.map(pokemon => {
-            const id = getId(pokemon)
+            const id = getId(pokemon);
             return (
               <li key={id}>
-                <span>{pokemon.name} </span>
+                <span>{pokemon.name.toUpperCase()} </span>
                 <Link href="/[id]" as={`/${id}`}>
-                  <a>View More</a>
+                  <a>View Stats</a>
                 </Link>
               </li>
-            )
+            );
           })}
         </ul>
       </center>
+
+      <button onClick={rand}>Request Random Pokemon</button>
+
+      <form
+        className="form"
+        // onSubmit={(e) => Router.push('/15')}
+        onSubmit={test}
+      >
+        <h2>Find a Pokemon</h2>
+        <div>
+          <div>
+            <input name="id" label="id" id="name" required />
+          </div>
+        </div>
+        <button>Find</button>
+      </form>
     </div>
 
     <style jsx>{`
@@ -79,15 +98,24 @@ const Home = ({ pokemons = [], count }) => (
       }
     `}</style>
   </div>
-)
+);
 
 Home.getInitialProps = async ({ req }) => {
-  console.log('💎  Hello, I am new getInitialProps at index.js')
-  const { data, count } = await pokemonApi.list()
+  const { data, count } = await pokemonApi.list();
   return {
     pokemons: data,
-    count,
-  }
+    count
+  };
+};
+
+const test = () => {
+  let path = document.getElementById('name').value
+  Router.push(`/${path}`)
 }
 
-export default Home
+const rand = () => {
+  let randomNum = Math.floor((Math.random() * 100) + 1)
+  Router.push(`/${randomNum}`)
+}
+
+export default Home;
